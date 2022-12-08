@@ -5,12 +5,7 @@ terraform {
         version = "=3.34.0"
         }
     }
-    backend "azurerm" {
-        resource_group_name  = var.TF_STATE_RG
-        storage_account_name = var.TF_STATE_SA
-        container_name       = var.TF_STATE_CN
-        key                  = var.TF_STATE_KEY
-    }
+    backend "azurerm" {}
 }
 
 provider "azurerm" {

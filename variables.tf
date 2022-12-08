@@ -21,27 +21,3 @@ variable "ARM_TENANT_ID" {
   type        = string
   sensitive   = true
 }
-
-variable "TF_STATE_RG" {
-  description = "TF State Resource Group"
-  type        = string
-  sensitive   = true
-}
-
-variable "TF_STATE_SA" {
-  description = "TF State Storage Account Name"
-  type        = string
-  sensitive   = true
-}
-
-variable "TF_STATE_CN" {
-  description = "TF State Container Account Name"
-  type        = string
-  sensitive   = true
-}
-
-variable "TF_STATE_KEY" {
-  description = "TF State tfstate key"
-  type        = string
-  sensitive   = true
-}
