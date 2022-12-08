@@ -5,7 +5,7 @@ resource "azurerm_resource_group" "easyurl-prod-rg" {
 
 # Create the Linux App Service Plan
 resource "azurerm_service_plan" "appserviceplan" {
-  name                = "webapp-asp-easyurl-prod"
+  name                = "webapp-asp-easyurl-be-prod"
   location            = azurerm_resource_group.easyurl-prod-rg.location
   resource_group_name = azurerm_resource_group.easyurl-prod-rg.name
   os_type             = "Linux"
@@ -14,7 +14,7 @@ resource "azurerm_service_plan" "appserviceplan" {
 
 # Create the web app, pass in the App Service Plan ID
 resource "azurerm_linux_web_app" "webapp" {
-  name                  = "webapp-easyurl-prod"
+  name                  = "webapp-easyurl-be-prod"
   location              = azurerm_resource_group.easyurl-prod-rg.location
   resource_group_name   = azurerm_resource_group.easyurl-prod-rg.name
   service_plan_id       = azurerm_service_plan.appserviceplan.id
