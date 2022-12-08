@@ -1,1 +1,1 @@
-# easyurlinfra
+# Infrastructure repository for EasyUrl application
