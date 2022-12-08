@@ -34,16 +34,15 @@ jobs:
           uses: hashicorp/setup-terraform@v2
 
         - name: Terraform Init
-          run: terraform init -lock=false -backend-config=storage_account_name=$TF_STATE_SA -backend-config=container_name=$TF_STATE_CN -backend-config=key=$TF_STATE_FILE -backend-config=resource_group_name=$TF_STATE_RG -backend-config=subscription_id="$ARM_SUBSCRIPTION_ID" -backend-config=tenant_id="$ARM_TENANT_ID" -backend-config=client_id="$ARM_CLIENT_ID" -backend-config=client_secret="$ARM_CLIENT_SECRET"
+          run: terraform init -backend-config=storage_account_name=$TF_STATE_SA -backend-config=container_name=$TF_STATE_CN -backend-config=key=$TF_STATE_FILE -backend-config=resource_group_name=$TF_STATE_RG -backend-config=subscription_id="$ARM_SUBSCRIPTION_ID" -backend-config=tenant_id="$ARM_TENANT_ID" -backend-config=client_id="$ARM_CLIENT_ID" -backend-config=client_secret="$ARM_CLIENT_SECRET"
 
         - name: Terraform Plan
-          run: terraform plan -lock=false # -input=false -var="location=eastus" -var="resource_group_name=tfdemo" -var="storage_account_name=tfdemoabcxxyg" -var="storage_account_tier=Standard" -var="virtual_network_name=myvnet"
-          continue-on-error: true
+          run: terraform plan -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
 
         - name: Terraform Apply
           if: ${{ inputs.TFAction == 'apply'}}  
-          run: terraform apply -lock=false -input=false -auto-approve
+          run: terraform apply -input=false -auto-approve -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
 
         - name: Terraform Destroy
           if: ${{ inputs.TFAction == 'destroy' }} 
-          run: terraform destroy -lock=false -input=false -auto-approve
+          run: terraform destroy -input=false -auto-approve -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
