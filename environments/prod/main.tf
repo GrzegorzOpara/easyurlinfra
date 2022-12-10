@@ -21,6 +21,8 @@ resource "azurerm_linux_web_app" "webapp" {
   https_only            = false
   site_config { 
     minimum_tls_version = "1.2"
-    linux_fx_version = "PYTHON|3.9"                                        
+      application_stack {
+        current_stack  = "PYTHON:3.9"                                      
+      }
   }
 }
