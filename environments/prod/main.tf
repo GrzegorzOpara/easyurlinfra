@@ -22,7 +22,7 @@ resource "azurerm_linux_web_app" "webapp" {
   site_config { 
     minimum_tls_version = "1.2"
       application_stack {
-        current_stack  = "PYTHON:3.9"                                      
+        python_version = "3.9"
       }
   }
 }
