@@ -23,3 +23,25 @@ resource "azurerm_linux_web_app" "webapp" {
     minimum_tls_version = "1.2"
   }
 }
+
+# Create storage account and containers for static files 
+resource "azurerm_storage_account" "easyurlbestatic" {
+  name                     = "easyurlbestatic"
+  location                 = azurerm_resource_group.easyurl-prod-rg.location
+  resource_group_name      = azurerm_resource_group.easyurl-prod-rg.name
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+}
+
+resource "azurerm_storage_container" "media" {
+  name                  = "media"
+  storage_account_name  = azurerm_storage_account.easyurlbestatic.name
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_container" "static" {
+  name                  = "static"
+  storage_account_name  = azurerm_storage_account.easyurlbestatic.name
+  container_access_type = "private"
+}
