@@ -40,11 +40,11 @@ resource "azurerm_storage_account" "easyurlbestatic" {
 resource "azurerm_storage_container" "media" {
   name                  = "media"
   storage_account_name  = azurerm_storage_account.easyurlbestatic.name
-  container_access_type = "private"
+  container_access_type = "public"
 }
 
 resource "azurerm_storage_container" "static" {
   name                  = "static"
   storage_account_name  = azurerm_storage_account.easyurlbestatic.name
-  container_access_type = "private"
+  container_access_type = "public"
 }
