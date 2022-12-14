@@ -5,6 +5,9 @@
 *.tfstate
 *.tfstate.*
 
+# custom extension
+*.secret
+
 # Crash log files
 crash.log
 crash.*.log
