@@ -48,3 +48,9 @@ resource "azurerm_storage_container" "static" {
   storage_account_name  = azurerm_storage_account.easyurlbestatic.name
   container_access_type = "public"
 }
+
+resource "azurerm_static_site" "static-web-app" {
+  name                = "easyurl-static-web-app"
+  location                 = azurerm_resource_group.easyurl-prod-rg.location
+  resource_group_name      = azurerm_resource_group.easyurl-prod-rg.name
+}
