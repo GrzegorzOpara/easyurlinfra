@@ -40,17 +40,17 @@ resource "azurerm_storage_account" "easyurlbestatic" {
 resource "azurerm_storage_container" "media" {
   name                  = "media"
   storage_account_name  = azurerm_storage_account.easyurlbestatic.name
-  container_access_type = "public"
+  container_access_type = "blob"
 }
 
 resource "azurerm_storage_container" "static" {
   name                  = "static"
   storage_account_name  = azurerm_storage_account.easyurlbestatic.name
-  container_access_type = "public"
+  container_access_type = "blob"
 }
 
 resource "azurerm_static_site" "static-web-app" {
   name                = "easyurl-static-web-app"
-  location                 = azurerm_resource_group.easyurl-prod-rg.location
+  location                 = "West Europe"
   resource_group_name      = azurerm_resource_group.easyurl-prod-rg.name
 }
