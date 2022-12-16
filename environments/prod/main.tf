@@ -25,6 +25,11 @@ resource "azurerm_linux_web_app" "webapp" {
         python_version = "3.9"
       }
   }
+  lifecycle {
+    ignore_changes = [
+        app_settings
+    ]
+  }
 }
 
 # Create storage account and containers for static files 
