@@ -30,16 +30,16 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v3      
         
-        - name: Setup Terraform
+        - name: Terraform_Setup
           uses: hashicorp/setup-terraform@v2
 
-        - name: Terraform Init
+        - name: Terraform_Init
           run: terraform init -backend-config=storage_account_name=$TF_STATE_SA -backend-config=container_name=$TF_STATE_CN -backend-config=key=$TF_STATE_FILE -backend-config=resource_group_name=$TF_STATE_RG -backend-config=subscription_id="$ARM_SUBSCRIPTION_ID" -backend-config=tenant_id="$ARM_TENANT_ID" -backend-config=client_id="$ARM_CLIENT_ID" -backend-config=client_secret="$ARM_CLIENT_SECRET"
 
-        - name: Terraform Plan
+        - name: Terraform_Plan
           run: terraform plan -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
 
-        - name: Terraform Apply
+        - name: Terraform_Apply
           if: ${{ inputs.TFAction == 'apply'}}  
           run: terraform apply -input=false -auto-approve -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
 
