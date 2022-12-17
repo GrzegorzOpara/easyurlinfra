@@ -13,6 +13,12 @@ data "azurerm_app_configuration_key" "app-config-data" {
   configuration_store_id = data.azurerm_app_configuration.app-config.id
   key = "${var.project_name}be-${each.key}"
   label = "${var.environment}"
+  depends_on = [
+    azurerm_app_configuration_key.CSRF_TRUSTED_ORIGINS,
+    azurerm_app_configuration_key.HOSTS,
+    azurerm_app_configuration_key.STATIC_AZURE_ACCOUNT_KEY,
+    azurerm_app_configuration_key.STATIC_AZURE_ACCOUNT_NAME,
+  ]
 }
 
 # Create main RG
@@ -49,6 +55,10 @@ resource "azurerm_linux_web_app" "webapp" {
   depends_on = [
     azurerm_app_configuration_key.STATIC_AZURE_ACCOUNT_NAME,
     azurerm_app_configuration_key.STATIC_AZURE_ACCOUNT_KEY,
+    data.azurerm_app_configuration_key.app-config-data["CSRF_TRUSTED_ORIGINS"],
+    data.azurerm_app_configuration_key.app-config-data["HOSTS"],
+    data.azurerm_app_configuration_key.app-config-data["STATIC_AZURE_ACCOUNT_NAME"],
+    data.azurerm_app_configuration_key.app-config-data["STATIC_AZURE_ACCOUNT_KEY"]
   ]
 }
 
