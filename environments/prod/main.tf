@@ -1,9 +1,27 @@
+locals {
+    # List of azure app configuration items to load and set up
+    app_config_keys_list = ["DB_NAME", "DB_USER", "DB_PASSWORD", "DB_SERVER", "SECRET_KEY", "CSRF_TRUSTED_ORIGINS", "HOSTS", "DEBUG", "STATIC_AZURE_ACCOUNT_KEY", "STATIC_AZURE_ACCOUNT_NAME", "SCM_DO_BUILD_DURING_DEPLOYMENT", "WEBSITE_ENABLE_SYNC_UPDATE_SITE" ]
+}
+
+data "azurerm_app_configuration" "app-config" {
+  name                = "${var.project_name}-app-config"
+  resource_group_name = "global-app-config-rg"
+}
+
+data "azurerm_app_configuration_key" "app-config-data" {
+  for_each   = toset(local.app_config_keys_list)
+  configuration_store_id = data.azurerm_app_configuration.app-config.id
+  key = "${var.project_name}be-${each.key}"
+  label = "${var.environment}"
+}
+
+# Create main RG
 resource "azurerm_resource_group" "rg" {
   name     = "${var.project_name}-${var.environment}-rg"
   location = "${var.location}"
 }
 
-# Create the Linux App Service Plan
+# Create the Linux App Service Plan for BE
 resource "azurerm_service_plan" "appserviceplan" {
   name                = "${var.project_name}-${var.environment}-webapp-asp"
   location            = azurerm_resource_group.rg.location
@@ -12,7 +30,7 @@ resource "azurerm_service_plan" "appserviceplan" {
   sku_name            = "B1"
 }
 
-# Create the web app, pass in the App Service Plan ID
+# Create the web app for BE
 resource "azurerm_linux_web_app" "webapp" {
   name                  = "${var.project_name}-${var.environment}-webapp-be"
   location              = azurerm_resource_group.rg.location
@@ -25,11 +43,13 @@ resource "azurerm_linux_web_app" "webapp" {
         python_version = "${var.python_version}"
       }
   }
-  lifecycle {
-    ignore_changes = [
-        app_settings
-    ]
+  app_settings = {
+    for key in tolist(local.app_config_keys_list) : key => data.azurerm_app_configuration_key.app-config-data["${key}"].value
   }
+  depends_on = [
+    azurerm_app_configuration_key.STATIC_AZURE_ACCOUNT_NAME,
+    azurerm_app_configuration_key.STATIC_AZURE_ACCOUNT_KEY,
+  ]
 }
 
 # Create storage account and containers for static files 
@@ -54,8 +74,38 @@ resource "azurerm_storage_container" "static" {
   container_access_type = "blob"
 }
 
+# Static web app for FE
 resource "azurerm_static_site" "static-web-app" {
   name                = "${var.project_name}-${var.environment}-static-web-app"
   location                 = azurerm_resource_group.rg.location
   resource_group_name      = azurerm_resource_group.rg.name
+}
+
+# Setting up the azure app configuration
+resource "azurerm_app_configuration_key" "STATIC_AZURE_ACCOUNT_NAME" {
+  configuration_store_id = data.azurerm_app_configuration.app-config.id
+  key                    = "STATIC_AZURE_ACCOUNT_NAME"
+  label                  = "${var.environment}"
+  value                  = azurerm_storage_account.sastatic.name
+}
+
+resource "azurerm_app_configuration_key" "STATIC_AZURE_ACCOUNT_KEY" {
+  configuration_store_id = data.azurerm_app_configuration.app-config.id
+  key                    = "STATIC_AZURE_ACCOUNT_KEY"
+  label                  = "${var.environment}"
+  value                  = azurerm_storage_account.sastatic.primary_access_key
+}
+
+resource "azurerm_app_configuration_key" "HOSTS" {
+  configuration_store_id = data.azurerm_app_configuration.app-config.id
+  key                    = "HOSTS"
+  label                  = "${var.environment}"
+  value                  = "${var.project_name}-${var.environment}-webapp-be.azurewebsites.net"
+}
+
+resource "azurerm_app_configuration_key" "CSRF_TRUSTED_ORIGINS" {
+  configuration_store_id = data.azurerm_app_configuration.app-config.id
+  key                    = "CSRF_TRUSTED_ORIGINS"
+  label                  = "${var.environment}"
+  value                  = "https://${var.project_name}-${var.environment}-webapp-be.azurewebsites.net"
 }
