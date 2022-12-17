@@ -77,35 +77,35 @@ resource "azurerm_storage_container" "static" {
 # Static web app for FE
 resource "azurerm_static_site" "static-web-app" {
   name                = "${var.project_name}-${var.environment}-static-web-app"
-  location                 = azurerm_resource_group.rg.location
+  location                 = "West Europe" # has to be hardcoded due to limited location where this services is available
   resource_group_name      = azurerm_resource_group.rg.name
 }
 
 # Setting up the azure app configuration
 resource "azurerm_app_configuration_key" "STATIC_AZURE_ACCOUNT_NAME" {
   configuration_store_id = data.azurerm_app_configuration.app-config.id
-  key                    = "STATIC_AZURE_ACCOUNT_NAME"
+  key                    = "${var.project_name}be-STATIC_AZURE_ACCOUNT_NAME"
   label                  = "${var.environment}"
   value                  = azurerm_storage_account.sastatic.name
 }
 
 resource "azurerm_app_configuration_key" "STATIC_AZURE_ACCOUNT_KEY" {
   configuration_store_id = data.azurerm_app_configuration.app-config.id
-  key                    = "STATIC_AZURE_ACCOUNT_KEY"
+  key                    = "${var.project_name}be-STATIC_AZURE_ACCOUNT_KEY"
   label                  = "${var.environment}"
   value                  = azurerm_storage_account.sastatic.primary_access_key
 }
 
 resource "azurerm_app_configuration_key" "HOSTS" {
   configuration_store_id = data.azurerm_app_configuration.app-config.id
-  key                    = "HOSTS"
+  key                    = "${var.project_name}be-HOSTS"
   label                  = "${var.environment}"
   value                  = "${var.project_name}-${var.environment}-webapp-be.azurewebsites.net"
 }
 
 resource "azurerm_app_configuration_key" "CSRF_TRUSTED_ORIGINS" {
   configuration_store_id = data.azurerm_app_configuration.app-config.id
-  key                    = "CSRF_TRUSTED_ORIGINS"
+  key                    = "${var.project_name}be-CSRF_TRUSTED_ORIGINS"
   label                  = "${var.environment}"
   value                  = "https://${var.project_name}-${var.environment}-webapp-be.azurewebsites.net"
 }
