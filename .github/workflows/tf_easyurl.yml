@@ -43,10 +43,3 @@ jobs:
         - name: Terraform_Apply
           id: tf_apply
           run: terraform apply -input=false -auto-approve -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
-
-        - name: Create GitHub Secret 
-          uses: gliech/create-github-secret-action@v1.4.10
-          with:
-            name: easyurlbe-STATIC_AZURE_ACCOUNT_NAME
-            value: ${{ steps.tf_apply.outputs.static_storage_account_name }}
-            pa_token: ${{ secrets.SECRET_MANAGER_PA_TOKEN }}
