@@ -119,3 +119,17 @@ resource "azurerm_app_configuration_key" "CSRF_TRUSTED_ORIGINS" {
   label                  = "${var.environment}"
   value                  = "https://${var.project_name}-${var.environment}-webapp-be.azurewebsites.net"
 }
+
+resource "azurerm_app_configuration_key" "FE_WEB_APP_URL" {
+  configuration_store_id = data.azurerm_app_configuration.app-config.id
+  key                    = "${var.project_name}fe-FE_WEB_APP_URL"
+  label                  = "${var.environment}"
+  value                  = azurerm_static_site.static-web-app.default_host_name
+}
+
+resource "azurerm_app_configuration_key" "FE_WEB_APP_API_KEY" {
+  configuration_store_id = data.azurerm_app_configuration.app-config.id
+  key                    = "${var.project_name}fe-FE_WEB_API_KEY"
+  label                  = "${var.environment}"
+  value                  = azurerm_static_site.static-web-app.api_key
+}
