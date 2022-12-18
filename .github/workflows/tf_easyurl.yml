@@ -20,6 +20,7 @@ jobs:
       TF_STATE_SA: ${{ secrets.TF_STATE_SA }}
       TF_STATE_CN: ${{ secrets.TF_STATE_CN }}
       TF_STATE_FILE: ${{ secrets.TF_STATE_FILE }}
+      $PA_TOKEN: ${{ secrets.SECRET_MANAGER_PA_TOKEN }}
     runs-on: ubuntu-latest
     environment: production
      
@@ -47,5 +48,5 @@ jobs:
           uses: gliech/create-github-secret-action@v1.4.10
           with:
             name: easyurlbe-STATIC_AZURE_ACCOUNT_NAME
-            value: steps.tf_apply.outputs.static_storage_account_name
-            pa_token: ${{ secrets.SECRET_MANAGER_PA_TOKEN }}
+            value: ${{ steps.tf_apply.outputs.static_storage_account_name }}
+            pa_token: $PA_TOKEN
