@@ -8,14 +8,15 @@
 #   sensitive = true
 # }
 
-output "be_web_app_url" {
-  value = module.prod.be_web_app_url
-}
+# output "be_web_app_url" {
+#   value = module.prod.be_web_app_url
+# }
 
-output "fe_web_app_url" {
-    value = module.prod.fe_web_app_url
-}
+# output "fe_web_app_url" {
+#   value = module.prod.fe_web_app_url
+# }
 
 # output "fe_web_app_api_key" {
-#     value = module.prod.fe_web_app_api_key
+#   value = module.prod.fe_web_app_api_key
+#   sensitive = true
 # }

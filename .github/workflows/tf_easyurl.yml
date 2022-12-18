@@ -20,6 +20,7 @@ jobs:
       TF_STATE_SA: ${{ secrets.TF_STATE_SA }}
       TF_STATE_CN: ${{ secrets.TF_STATE_CN }}
       TF_STATE_FILE: ${{ secrets.TF_STATE_FILE }}
+
     runs-on: ubuntu-latest
     environment: production
      
@@ -40,9 +41,5 @@ jobs:
           run: terraform plan -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
 
         - name: Terraform_Apply
-          if: ${{ inputs.TFAction == 'apply'}}  
+          id: tf_apply
           run: terraform apply -input=false -auto-approve -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
-
-        - name: Terraform Destroy
-          if: ${{ inputs.TFAction == 'destroy' }} 
-          run: terraform destroy -input=false -auto-approve -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
