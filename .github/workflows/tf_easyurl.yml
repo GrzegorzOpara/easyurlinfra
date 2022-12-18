@@ -2,6 +2,11 @@ name: 'tf_easyurl'
 
 on:
   workflow_dispatch:
+    inputs:
+      TFAction:
+        description: "Terraform Action - Apply or Destroy"     
+        required: true
+        default: "apply"
 
 jobs:
   terraform:
