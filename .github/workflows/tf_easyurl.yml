@@ -2,11 +2,6 @@ name: 'tf_easyurl'
 
 on:
   workflow_dispatch:
-    inputs:
-      TFAction:
-        description: "Terraform Action - Apply or Destroy"     
-        required: true
-        default: "apply"
 
 jobs:
   terraform:
@@ -41,5 +36,4 @@ jobs:
           run: terraform plan -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
 
         - name: Terraform_Apply
-          id: tf_apply
           run: terraform apply -input=false -auto-approve -var="ARM_CLIENT_ID=$ARM_CLIENT_ID" -var="ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET" -var="ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID" -var="ARM_TENANT_ID=$ARM_TENANT_ID" 
