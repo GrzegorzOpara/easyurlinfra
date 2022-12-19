@@ -21,6 +21,10 @@ resource "azurerm_linux_web_app" "webapp" {
   service_plan_id       = azurerm_service_plan.appserviceplan.id
   https_only            = true
   site_config { 
+    cors {
+      allowed_origins = []
+      support_credentials = true
+    }
     minimum_tls_version = "1.2"
       application_stack {
         python_version = "${var.python_version}"
