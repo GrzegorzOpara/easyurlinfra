@@ -53,6 +53,12 @@ resource "azurerm_storage_container" "static" {
   container_access_type = "blob"
 }
 
+resource "azurerm_storage_container" "pubcert" {
+  name                  = "pubcert"
+  storage_account_name  = azurerm_storage_account.sastatic.name
+  container_access_type = "blob"
+}
+
 # Static web app for FE
 resource "azurerm_static_site" "static-web-app" {
   name                = "${var.project_name}-${var.environment}-static-web-app"
